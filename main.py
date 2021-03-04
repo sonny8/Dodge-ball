@@ -1,10 +1,10 @@
 import pgzero
 from pgzero.builtins import Actor, animate, keyboard
-player = Actor("diamond_s.png")
+player = Actor("")
 
 def draw():
     screen.fill("black")
     player.draw()
 
 
-C
+
