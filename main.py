@@ -1,21 +1,41 @@
 import pgzero
 from pgzero.builtins import Actor, animate, keyboard
-
-playerimage = "alien"
+import time
+playerimage = "resizeimage"
 ballimage = "dodge-ball-brown"
+bgimage = "background1"
 player = Actor(playerimage)
 balls = Actor(ballimage)
-WIDTH = 500
-HEIGHT = WIDTH
-
+bg = Actor("background1")
+WIDTH = 490
+HEIGHT = 450
 
 def draw():
-    screen.fill("black")
+    localtime = time.localtime(time.time())
+
+    hour = localtime[3]
+    if hour > 5 and hour < 12:
+
+        screen.fill("lightblue")
+
+    if hour > 17 and hour < 24:
+        screen.fill("darkblue")
+
+
+
+
+    bg.x = 250
+
+    bg.draw()
     player.draw()
-    balls.draw()
+
+
+
 
 
 def update():
+
+
 
     if keyboard.right:
         player.x += 5
@@ -35,6 +55,17 @@ def update():
 
     if player.bottom < 0:
         player.top = HEIGHT
+        bg.x = 250
+        bg.image = "background1"
+
+        bg.draw()
+
 
     if player.top > HEIGHT:
         player.bottom = 0
+        bg.image = "ground (3)"
+        bg.y = 250
+        bg.draw()
+
+    if player.y > HEIGHT and bg.image == "ground (3)":
+        player.y = HEIGHT
