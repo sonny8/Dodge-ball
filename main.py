@@ -1,16 +1,19 @@
 import pgzero
 from pgzero.builtins import Actor, animate, keyboard
 import time
-playerimage = "resizeimage"
+import random
+playerimage = "diamond_s"
 ballimage = "dodge-ball-brown"
 bgimage = "background1"
 player = Actor(playerimage)
-balls = Actor(ballimage)
+ball = Actor(ballimage)
 bg = Actor("background1")
 WIDTH = 490
 HEIGHT = 450
-
+fail = False
+ball.center = WIDTH / 2, HEIGHT / 2
 def draw():
+    global fail
     localtime = time.localtime(time.time())
 
     hour = localtime[3]
@@ -20,6 +23,11 @@ def draw():
 
     if hour > 17 and hour < 24:
         screen.fill("darkblue")
+        
+    if fail:
+        screen.fill("red")
+        
+    
 
 
 
@@ -28,15 +36,48 @@ def draw():
 
     bg.draw()
     player.draw()
+    ball.draw()
 
 
 
 
+xspeed = random.randint(0,5)
+yspeed =random.randint(0,5)
 
 def update():
+    
+    
+    global xspeed, yspeed, fail
+    
+    ranpro_y = random.randint(-1,1)
+    ranpro_x = random.randint(-1,1)
+    
+    xspeed+= ranpro_x
+    yspeed += ranpro_y
+    ball.x += xspeed
+    ball.y += yspeed
+    
+    if xspeed > 7:
+        xspeed = 3
+    if xspeed < -7:
+        xspeed = -3
+        
+        
+    if yspeed > 7:
+        yspeed = 3
+        
+    if yspeed < -7:
+        yspeed = -3
+    
+    if player.colliderect(ball):
+        sounds.eep.play()
+        fail = True
+        
+        
+        
 
-
-
+    
+    
     if keyboard.right:
         player.x += 5
     if keyboard.left:
@@ -69,3 +110,14 @@ def update():
 
     if player.y > HEIGHT and bg.image == "ground (3)":
         player.y = HEIGHT
+        
+    if ball.left > WIDTH:
+        ball.right = 0
+        
+    if ball.right < 0:
+        ball.left = WIDTH
+    if ball.bottom < 0:
+        ball.top = HEIGHT
+        
+    if ball.top > HEIGHT:
+        ball.bottom = 0
